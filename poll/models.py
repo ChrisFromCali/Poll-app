@@ -1,4 +1,5 @@
 from django.db import models
+from django.forms import ModelForm
 from django.contrib.auth.models import User
 from django.utils import timezone
 
@@ -18,3 +19,12 @@ class Choices(models.Model):
     def __str__(self):
         return self.choice_text
 
+class QuestionForm(ModelForm):
+    class Meta:
+        model = Question
+        fields = ['question_text']
+
+class ChoicesForm(ModelForm):
+    class Meta:
+        model = Choices
+        fields = ['choice_text']

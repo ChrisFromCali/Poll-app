@@ -6,7 +6,7 @@ from django.utils import timezone
 class Question(models.Model):
     question_text = models.CharField(max_length=128)
     date_published = models.DateTimeField(default=timezone.now)
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    author = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
 
     def __str__(self):
         return self.question_text
@@ -24,7 +24,7 @@ class QuestionForm(ModelForm):
         model = Question
         fields = ['question_text']
 
-class ChoicesForm(ModelForm):
-    class Meta:
-        model = Choices
-        fields = ['choice_text']
+""" class ChoicesForm(ModelForm):
+class Meta:
+    model = Choices
+    fields = ['choice_text'] """

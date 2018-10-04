@@ -6,7 +6,8 @@
         {% csrf_token %}
         {{QuestionForm|crispy}}
         <div class="form-group choices_group">
-                {{ChoicesFormSet|crispy}}
+                {{formset|crispy}}
+                {{formset.management_form}}
         </div>
         
         <div class="form-group row">
@@ -15,10 +16,4 @@
         </div>
     </form>
 </div>
-
-<script>
-    $('#add_option_btn').on('click', function() {
-        $('form').append("{{ChoicesFormSet|crispy}}")
-    })
-</script>
 {% endblock body %}

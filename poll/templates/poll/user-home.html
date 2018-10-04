@@ -1,0 +1,30 @@
+{% extends "user/base.html" %}
+
+{% block body %}
+
+    <div class="container">
+        <h1 class="display-3">{{ user.username }}'s Polls</h1>
+        {% for question in user.question_set.all %}
+            <div class="card">
+                <div class="card-header">
+                    <span>
+                        {{question.question_text}}
+                    </span>
+                    <span style="float: right;">
+                        <button class=" btn btn-primary"type="submit" value="{{ question.id }}">View poll</button>
+                    </span>
+                    
+                </div>
+                <ul class="list-group list-group-flush">
+                    {% for choice in question.choices_set.all %}
+                        <li class="list-group-item">
+                            {{choice.choice_text}}
+                            <div class="mr-auto">{{choice.votes}}</div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endfor %}
+    </div>
+
+{% endblock body %}

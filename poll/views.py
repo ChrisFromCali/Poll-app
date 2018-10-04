@@ -8,10 +8,19 @@ from django.forms import formset_factory
 
 # Create your views here.
 def home(request):
-    return HttpResponse('<h1>Polls home</h1>')
+    if request.user.is_authenticated:
+        username = request.user.username
+        user = User.objects.get(username=username)
+        context = {
+            'user': user
+        }
+        return render(request, 'poll/user-home.html', context)
+    else:
+        return render(request, 'poll/home.html')
+
 
 def create(request):
-    ChoicesFormSet = formset_factory(ChoicesForm, extra=3)
+    ChoicesFormSet = formset_factory(ChoicesForm)
     if request.method == 'POST':
         questionForm = QuestionForm(request.POST)
         
@@ -27,12 +36,23 @@ def create(request):
             
             q.save()
             for form in formset.cleaned_data:
-                print(form['choice_text'])
-                q.choices_set.create(choice_text=form['choice_text'])
+                print(form)
+                if(form):
+                    print(form['choice_text'])
+                    q.choices_set.create(choice_text=form['choice_text'])
             q.save()
-        return redirect('poll-create')
+        return redirect('poll-home')
 
     else:
         formset = ChoicesFormSet()
         form = {'QuestionForm':QuestionForm, 'formset':formset}
     return render(request, 'poll/create.html', form)
+
+def view(request, poll_id):
+    poll = Question.objects.get(id=poll_id)
+    context = {
+        'poll': poll,
+        'poll_id': poll_id
+    }
+    return render(request, 'poll/view.html', context)
+

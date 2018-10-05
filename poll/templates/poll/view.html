@@ -2,7 +2,20 @@
 
 {% block body %}
     {{poll.question_text}}
-    <form action="">
-        <input type="radio" name="" id="opt1">
+    <form action="{% url 'poll-vote' poll.id %}" method="POST">
+        {% csrf_token %}
+        <div class="input-group">
+        {% for choice in poll.choices_set.all %}
+        
+            <div class="input-group-prepend">
+                <div class="input-group-text">
+                    <input type="radio" name="choice" id="{{choice.id}}" value="{{choice.id}}">
+                </div>
+            </div>
+            {{choice.choice_text}}
+        
+        {% endfor %}
+        </div>
+        <input type="submit" value="Something">
     </form>
 {% endblock body %}

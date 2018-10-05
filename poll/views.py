@@ -56,3 +56,20 @@ def view(request, poll_id):
     }
     return render(request, 'poll/view.html', context)
 
+def vote_noid(request):
+    return HttpResponse("It worked")
+
+def vote(request, poll_id):
+    if request.method == 'POST':
+        print(request.POST['choice'])
+        choice_selected = Question.objects.get(id=poll_id).choices_set.get(id=request.POST['choice'])
+        choice_selected.votes += 1
+        choice_selected.save()
+        return redirect('poll-results', poll_id)
+    else:
+        return redirect('poll-view', poll_id)
+
+def results(request, poll_id):
+    return HttpResponse("Results for " + str(poll_id))
+
+

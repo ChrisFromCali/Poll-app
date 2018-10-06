@@ -1,5 +1,40 @@
 {% extends "user/base.html" %}
 
 {% block body %}
-<h1 class="display-4">Anonymous home</h1>
+<div class="container">
+    {% for question in polls %}
+    <div class="card mb-4">
+        <div class="card-header">
+                <span>
+                        {{question.question_text}}{{question.id}}
+                    </span>
+                    <span style="float: right;">
+                        <form action="{% url 'poll-view' question.id %}" method="get">
+                            <button type="submit" class="btn btn-primary">View poll</button>
+                        </form>
+                    </span>
+        </div>
+
+            <ul class="list-group list-group-flush">
+                {% for choice in question.choices_set.all %}
+                <li class="list-group-item">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="{{choice.choice_text}}" readonly>
+                        <div class="input-group-append">
+                            <span class="input-group-text">{{choice.votes}} Votes</span>
+                        </div>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+        <small class="text-secondary text-right pr-4">
+            {% if question.author is None %}
+                Posted by Anonymous
+            {% else %}
+                Posted by <a href="#">{{question.author}}</a>
+            {% endif %}
+        </small>
+    </div>
+    {% endfor %}
+</div>
 {% endblock body %}

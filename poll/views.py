@@ -16,7 +16,13 @@ def home(request):
         }
         return render(request, 'poll/user-home.html', context)
     else:
-        return render(request, 'poll/home.html')
+        recent_polls = Question.objects.all().order_by('-id')[:10]
+        for poll in recent_polls:
+            print(poll.question_text)
+            for choice in poll.choices_set.all():
+                print(choice)
+        context = {'polls': recent_polls}
+        return render(request, 'poll/home.html', context)
 
 
 def create(request):
@@ -41,7 +47,7 @@ def create(request):
                     print(form['choice_text'])
                     q.choices_set.create(choice_text=form['choice_text'])
             q.save()
-        return redirect('poll-home')
+        return redirect('poll-view', q.id)
 
     else:
         formset = ChoicesFormSet()

@@ -18,11 +18,13 @@ from django.urls import path, include
 from django.contrib.auth import views as auth_views
 from user.views import register as register_view
 from . import views as website_view
+from poll import views as poll_view
 urlpatterns = [
-    path('', website_view.index, name='home'),
+    path('', poll_view.create, name='home'),
     path('poll/', include('poll.urls')),
     path('login/', auth_views.LoginView.as_view(template_name='user/login.html'), name='login'),
     path('logout/', auth_views.LogoutView.as_view(template_name='user/logout.html'), name='logout'),
     path('register/', register_view, name='register'),
+    path('user/', include('user.urls')),
     path('admin/', admin.site.urls), 
 ]
